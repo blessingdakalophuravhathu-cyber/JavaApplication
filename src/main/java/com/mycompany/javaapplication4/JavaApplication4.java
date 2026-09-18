@@ -1,121 +1,70 @@
-
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.javaapplication4;
 
-/**
- *
- * @author Student
- */
+import java.util.Scanner;
 
-public class Login {
+public class JavaApplication4 {
 
-    String username;
-    String password;
-    String cellPhoneNumber;
+    public static void main(String[] args) {
 
-    String firstName;
-    String lastName;
+        Scanner input = new Scanner(System.in);
 
-    String loginUsername;
-    String loginPassword;
+        Login login = new Login();
 
-    boolean loginStatus;
+        System.out.print("Enter your first name: ");
+        login.firstName = input.nextLine();
 
-    public boolean checkUserName() {
+        System.out.print("Enter your last name: ");
+        login.lastName = input.nextLine();
 
-        if (username.contains("_") && username.length() <= 5) {
-            return true;
+        System.out.print("Enter your username: ");
+        login.username = input.nextLine();
+
+        System.out.print("Enter your password: ");
+        login.password = input.nextLine();
+
+        System.out.print("Enter your cell phone number: ");
+        login.cellPhoneNumber = input.nextLine();
+
+        System.out.println();
+
+        if (login.checkUserName()) {
+            System.out.println("Username successfully captured.");
         } else {
-            return false;
-        }
-    }
-
-    public boolean checkPasswordComplexity() {
-
-        boolean capitalLetter = false;
-        boolean number = false;
-        boolean specialCharacter = false;
-
-        for (int i = 0; i < password.length(); i++) {
-
-            char character = password.charAt(i);
-
-            if (Character.isUpperCase(character)) {
-                capitalLetter = true;
-            }
-
-            if (Character.isDigit(character)) {
-                number = true;
-            }
-
-            if (!Character.isLetterOrDigit(character)) {
-                specialCharacter = true;
-            }
+            System.out.println("Username is not correctly formatted; please ensure that your username contains an underscore and is no more than five characters in length.");
         }
 
-        if (password.length() >= 8
-                && capitalLetter
-                && number
-                && specialCharacter) {
-
-            return true;
-
+        if (login.checkPasswordComplexity()) {
+            System.out.println("Password successfully captured.");
         } else {
-            return false;
+            System.out.println("Password is not correctly formatted; please ensure that the password contains at least eight characters, a capital letter, a number, and a special character.");
         }
-    }
 
-    public boolean checkCellPhoneNumber() {
-
-        if (cellPhoneNumber.matches("^\\+27[0-9]{9}$")) {
-            return true;
+        if (login.checkCellPhoneNumber()) {
+            System.out.println("Cell number successfully captured.");
         } else {
-            return false;
+            System.out.println("Cell number is incorrectly formatted or does not contain an international code; please correct the number and try again.");
         }
-    }
 
-    public String registerUser() {
+        if (login.checkUserName()
+                && login.checkPasswordComplexity()
+                && login.checkCellPhoneNumber()) {
 
-        if (!checkUserName()) {
+            System.out.println();
+            System.out.println(login.registerUser());
 
-            return "Username is not correctly formatted; please ensure that your username contains an underscore and is no more than five characters in length.";
+            System.out.println();
+            System.out.print("Enter your username to login: ");
+            login.loginUsername = input.nextLine();
 
-        } else if (!checkPasswordComplexity()) {
+            System.out.print("Enter your password to login: ");
+            login.loginPassword = input.nextLine();
 
-            return "Password is not correctly formatted; please ensure that the password contains at least eight characters, a capital letter, a number, and a special character.";
+            login.loginStatus = login.loginUser();
 
-        } else {
-
-            return "User successfully registered.";
+            System.out.println();
+            System.out.println(login.returnLoginStatus());
         }
-    }
 
-    public boolean loginUser() {
-
-        if (loginUsername.equals(username)
-                && loginPassword.equals(password)) {
-
-            return true;
-
-        } else {
-
-            return false;
-        }
-    }
-
-    public String returnLoginStatus() {
-
-        if (loginStatus) {
-
-            return "Welcome " + firstName + ", " + lastName
-                    + " it is great to see you again.";
-
-        } else {
-
-            return "Username or password incorrect, please try again.";
-        }
+        input.close();
     }
 }
