@@ -1,5 +1,4 @@
-// Cellphone number regex researched from Warren (2016).
-// Source: Luke Warren Development, "Regex: South African Phone number".
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -68,7 +67,8 @@ public class Login {
             return false;
         }
     }
-
+// Cellphone number regex researched from Warren (2016).
+// Source: Luke Warren Development, "Regex: South African Phone number".
     public boolean checkCellPhoneNumber() {
 
         if (cellPhoneNumber.matches("^\\+27[0-9]{9}$")) {
