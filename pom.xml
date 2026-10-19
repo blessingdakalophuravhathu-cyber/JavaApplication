@@ -15,18 +15,43 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>25</maven.compiler.release>
-        <exec.mainClass>javaapplication2.MyApp</exec.mainClass>
+        <exec.mainClass>com.mycompany.javaapplication4.QuickChat</exec.mainClass>
+        <junit.version>5.12.2</junit.version>
     </properties>
 
     <dependencies>
 
+        <!-- JUnit 5 for unit testing -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.12.2</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+
+            <!-- Compiles the Java source code -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.0</version>
+                <configuration>
+                    <release>25</release>
+                </configuration>
+            </plugin>
+
+            <!-- Finds and runs JUnit 5 tests -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.5.2</version>
+            </plugin>
+
+        </plugins>
+    </build>
 
 </project>
