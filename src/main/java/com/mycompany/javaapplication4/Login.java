@@ -1,140 +1,92 @@
 package com.mycompany.javaapplication4;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import static org.junit.jupiter.api.Assertions.*;
-import java.util.Scanner;
+public class Login {
 
-public class MessageTest {
+    String username;
+    String password;
+    String cellPhoneNumber;
+    String firstName;
+    String lastName;
+    String loginUsername;
+    String loginPassword;
+    boolean loginStatus;
 
-    @BeforeEach
-    public void setUp() {
-        Message.clearAllMessages();
+    public boolean checkUserName() {
+        return username != null
+                && username.contains("_")
+                && username.length() <= 5;
     }
 
-    @Test
-    public void testMessageID() {
-        Message m = new Message(
-                0, "+27718693002", "Hi Mike, can you join us tonight?");
+    public boolean checkPasswordComplexity() {
+        if (password == null) {
+            return false;
+        }
 
-        assertTrue(m.checkMessageD());
-        assertEquals(10, m.getMessageID().length());
+        boolean capital = false;
+        boolean number = false;
+        boolean special = false;
+
+        for (int i = 0; i < password.length(); i++) {
+            char c = password.charAt(i);
+
+            if (Character.isUpperCase(c)) {
+                capital = true;
+            }
+            if (Character.isDigit(c)) {
+                number = true;
+            }
+            if (!Character.isLetterOrDigit(c)) {
+                special = true;
+            }
+        }
+
+        return password.length() >= 8
+                && capital && number && special;
     }
 
-    @Test
-    public void testRecipientSuccess() {
-        Message m = new Message(
-                0, "+27718693002", "Hello");
-
-        assertEquals("Cell phone number successfully captured.",
-                m.checkRecipientCell());
+    public boolean checkCellPhoneNumber() {
+        return cellPhoneNumber != null
+                && cellPhoneNumber.matches("\\+27[0-9]{9}");
     }
 
-    @Test
-    public void testRecipientFailure() {
-        Message m = new Message(
-                0, "08575975889", "Hello");
+    public String registerUser() {
+        if (!checkUserName()) {
+            return "Username is not correctly formatted; please ensure "
+                    + "that your username contains an underscore and is "
+                    + "no more than five characters in length.";
+        }
 
-        assertEquals(
-                "Cell phone number is incorrectly formatted or does "
-                + "not contain an international code. Please correct "
-                + "the number and try again.",
-                m.checkRecipientCell());
+        if (!checkPasswordComplexity()) {
+            return "Password is not correctly formatted; please ensure "
+                    + "that the password contains at least eight "
+                    + "characters, a capital letter, a number, "
+                    + "and a special character.";
+        }
+
+        if (!checkCellPhoneNumber()) {
+            return "Cell phone number is incorrectly formatted or does "
+                    + "not contain an international code. Please correct "
+                    + "the number and try again.";
+        }
+
+        return "User successfully registered.";
     }
 
-    @Test
-    public void testMessageLengthSuccess() {
-        Message m = new Message(
-                0, "+27718693002", "Hello Mike");
+    public boolean loginUser() {
+        loginStatus = loginUsername != null
+                && loginPassword != null
+                && loginUsername.equals(username)
+                && loginPassword.equals(password);
 
-        assertEquals("Message ready to send.",
-                m.checkMessageLength());
+        return loginStatus;
     }
 
-    @Test
-    public void testMessageLengthFailure() {
-        Message m = new Message(
-                0, "+27718693002", "A".repeat(251));
+    public String returnLoginStatus() {
+        if (loginStatus) {
+            return "Welcome " + firstName + ", " + lastName
+                    + " it is great to see you again.";
+        }
 
-        assertEquals(
-                "Message exceeds 250 characters by 1; please reduce "
-                + "the size.",
-                m.checkMessageLength());
-    }
-
-    @Test
-    public void testMessageHash() {
-        Message m = new Message(
-                0, "+27718693002",
-                "Hi Mike, can you join us for dinner tonight?");
-
-        String expected = m.getMessageID().substring(0, 2)
-                + ":0:HITONIGHT";
-
-        assertEquals(expected, m.createMessageHash());
-    }
-
-    @Test
-    public void testSendMessage() {
-        Message m = new Message(
-                0, "+27718693002", "Hello Mike");
-
-        int before = Message.returnTotalMessages();
-
-        assertEquals("Message successfully sent.",
-                m.sentMessage(new Scanner("1\n")));
-
-        assertEquals("Sent", m.getStatus());
-        assertEquals(before + 1, Message.returnTotalMessages());
-        assertEquals(1, Message.getSentMessages().size());
-    }
-
-    @Test
-    public void testDisregardMessage() {
-        Message m = new Message(
-                1, "+27718693002", "Hello Keegan");
-
-        assertEquals("Press O to delete the message.",
-                m.sentMessage(new Scanner("2\n")));
-
-        assertEquals("Disregarded", m.getStatus());
-        assertEquals(1, Message.getDisregardedMessages().size());
-    }
-
-    @Test
-    public void testStoreMessage() {
-        Message m = new Message(
-                2, "+27718693002", "Hello Keegan");
-
-        assertEquals("Message successfully stored.",
-                m.sentMessage(new Scanner("3\n")));
-
-        assertEquals("Stored", m.getStatus());
-        assertEquals(1, Message.getStoredMessages().size());
-    }
-
-    @Test
-    public void testInvalidOption() {
-        Message m = new Message(
-                0, "+27718693002", "Hello");
-
-        assertEquals("Invalid option. Please choose 1, 2, or 3.",
-                m.sentMessage(new Scanner("9\n")));
-    }
-
-    @Test
-    public void testMessageIDArray() {
-        Message m = new Message(
-                0, "+27718693002", "Hello");
-
-        assertTrue(Message.getMessageIDs().contains(m.getMessageID()));
-    }
-
-    @Test
-    public void testMessageHashArray() {
-        Message m = new Message(
-                0, "+27718693002", "Hello");
-
-        assertTrue(Message.getMessageHashes().contains(m.getMessageHash()));
+        return "Username or password incorrect, please try again.";
     }
 }
