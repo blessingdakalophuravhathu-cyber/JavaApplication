@@ -1,4 +1,4 @@
-ackage com.mycompany.javaapplication4;
+package com.mycompany.javaapplication4;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
