@@ -1,14 +1,16 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.javaapplication4;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.Scanner;
 
 public class MessageTest {
+
+    @BeforeEach
+    public void setUp() {
+        Message.clearAllMessages();
+    }
 
     @Test
     public void testMessageID() {
@@ -77,13 +79,14 @@ public class MessageTest {
         Message m = new Message(
                 0, "+27718693002", "Hello Mike");
 
-        int before = m.returnTotalMessages();
+        int before = Message.returnTotalMessages();
 
         assertEquals("Message successfully sent.",
                 m.sentMessage(new Scanner("1\n")));
 
         assertEquals("Sent", m.getStatus());
-        assertEquals(before + 1, m.returnTotalMessages());
+        assertEquals(before + 1, Message.returnTotalMessages());
+        assertEquals(1, Message.getSentMessages().size());
     }
 
     @Test
@@ -95,6 +98,7 @@ public class MessageTest {
                 m.sentMessage(new Scanner("2\n")));
 
         assertEquals("Disregarded", m.getStatus());
+        assertEquals(1, Message.getDisregardedMessages().size());
     }
 
     @Test
@@ -106,6 +110,7 @@ public class MessageTest {
                 m.sentMessage(new Scanner("3\n")));
 
         assertEquals("Stored", m.getStatus());
+        assertEquals(1, Message.getStoredMessages().size());
     }
 
     @Test
@@ -115,5 +120,21 @@ public class MessageTest {
 
         assertEquals("Invalid option. Please choose 1, 2, or 3.",
                 m.sentMessage(new Scanner("9\n")));
+    }
+
+    @Test
+    public void testMessageIDArray() {
+        Message m = new Message(
+                0, "+27718693002", "Hello");
+
+        assertTrue(Message.getMessageIDs().contains(m.getMessageID()));
+    }
+
+    @Test
+    public void testMessageHashArray() {
+        Message m = new Message(
+                0, "+27718693002", "Hello");
+
+        assertTrue(Message.getMessageHashes().contains(m.getMessageHash()));
     }
 }
